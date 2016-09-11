@@ -1,10 +1,81 @@
 // Naive game implementation in Rust
 use std::ops::{Add, Sub, Mul};
 
+static NUM_BLOCKS: usize = 65535;
+static NUM_ENTITIES: usize = 1000;
+
 fn main() {
     println!("Hello, world!");
 }
 
+/*
+Chunk
+*/
+
+struct Chunk {
+    blocks: Vec<Block>,
+    entities: Vec<Entity>,
+    location: Vector
+}
+
+impl Chunk {
+    fn new(location: Vector) -> Chunk {
+        let blocks = {
+            let mut blocks = Vec::with_capacity(NUM_BLOCKS);
+            for i in 0..NUM_BLOCKS {
+                let converted_i = i as f32;
+                let block = Block::new(
+                    Vector::new(converted_i, converted_i, converted_i),
+                    format!("Block: {}", i).to_string(),
+                    100,
+                    1,
+                    true,
+                    true,
+                    1
+                );
+                blocks.push(block);
+            }
+            blocks
+        };
+
+        let entities = {
+            let mut entities = Vec::with_capacity(NUM_ENTITIES);
+            for i in 0..(NUM_ENTITIES / 4) {
+                let converted_i = i as f32;
+                entities.push(Entity::new(
+                    Vector::new(converted_i, converted_i, converted_i),
+                    EntityType::Chicken
+                ));
+                entities.push(Entity::new(
+                    Vector::new(converted_i + 2.0, converted_i, converted_i),
+                    EntityType::Chicken
+                ));
+                entities.push(Entity::new(
+                    Vector::new(converted_i + 3.0, converted_i, converted_i),
+                    EntityType::Chicken
+                ));
+                entities.push(Entity::new(
+                    Vector::new(converted_i + 4.0, converted_i, converted_i),
+                    EntityType::Chicken
+                ));
+            }
+            entities
+        };
+
+
+        Chunk {
+            location: location,
+            blocks: blocks,
+            entities: entities
+        }
+    }
+
+    fn process_entites(&mut self) {
+        for entity in self.entities.iter_mut() {
+            entity.update_position();
+        }
+    }
+}
 /*
 Entity
 */
@@ -53,8 +124,8 @@ impl Entity {
     }
 
     fn update_position(&mut self) {
-        let movementVector = Vector::new(1.0, 1.0, 1.0) * self.speed;
-        self.location = self.location + movementVector;
+        let movementVector = Vector::new(1.0, 1.0, 1.0) * self.speed.clone();
+        self.location = self.location.clone() + movementVector;
     }
 }
 
@@ -110,7 +181,7 @@ fn test_vector() {
     assert_eq!(a - b, Vector::new(1.0, 2.0, -1.0));
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 struct Vector {
     x: f32, // floats in C# are single-precision, so f32 is used here instead of f64
     y: f32,
