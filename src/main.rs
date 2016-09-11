@@ -3,15 +3,68 @@ use std::ops::{Add, Sub, Mul};
 
 static NUM_BLOCKS: usize = 65535;
 static NUM_ENTITIES: usize = 1000;
+static CHUNK_COUNT: usize = 100;
 
 fn main() {
-    println!("Hello, world!");
+    println!("Loading World...");
+    let mut game = Game::new();
+}
+
+/*
+Game
+*/
+struct Game {
+    chunks: Vec<Chunk>,
+    player_location: Vector,
+    chunk_counter: f32
+}
+
+impl Game {
+    fn new() -> Game {
+        let mut chunk_counter = 0.0f32;
+        let chunks = {
+            let mut chunks = Vec::with_capacity(CHUNK_COUNT);
+            for i in 0..CHUNK_COUNT {
+                chunks.push(Chunk::new(Vector::new(chunk_counter, 0.0, 0.0)));
+                chunk_counter += 1.0;
+            }
+            chunks
+        };
+
+        Game {
+            chunks: chunks,
+            player_location: Vector::new(0.0, 0.0, 0.0),
+            chunk_counter: chunk_counter
+        }
+    }
+
+    fn update_chunks(&mut self) {
+        let mut amount_of_chunks_removed = 0;
+        for chunk in self.chunks.iter_mut() {
+            chunk.process_entites();
+        }
+
+        let player_location = self.player_location.clone();
+
+        self.chunks.retain(| x | {
+            let chunkDistance = Vector::get_distance(x.location, self.player_location);
+            if chunkDistance > CHUNK_COUNT as f32 {
+                amount_of_chunks_removed += 1;
+                return false;
+            }
+            true
+        });
+
+        for _ in 0..amount_of_chunks_removed {
+            self.chunks.push(Chunk::new(Vector::new(self.chunk_counter, 0.0, 0.0)));
+            self.chunk_counter += 1.0;
+        }
+    }
 }
 
 /*
 Chunk
 */
-
 struct Chunk {
     blocks: Vec<Block>,
     entities: Vec<Entity>,
