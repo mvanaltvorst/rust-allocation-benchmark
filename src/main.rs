@@ -1,4 +1,7 @@
 // Naive game implementation in Rust
+extern crate time;
+
+use time::PreciseTime;
 use std::ops::{Add, Sub, Mul};
 
 static NUM_BLOCKS: usize = 65535;
@@ -6,8 +9,22 @@ static NUM_ENTITIES: usize = 1000;
 static CHUNK_COUNT: usize = 100;
 
 fn main() {
+    // TODO: Implement timing
     println!("Loading World...");
+    let start = PreciseTime::now();
     let mut game = Game::new();
+    let end = PreciseTime::now();
+    println!("FINISHED!");
+    println!("Load Time: {}s", start.to(end));
+
+    loop {
+        let start = PreciseTime::now();
+        let playerMovement = Vector::new(0.1, 0.0, 0.0);
+        game.player_location = game.player_location + playerMovement;
+        game.update_chunks();
+        let end = PreciseTime::now();
+        println!("{}ms", start.to(end).num_milliseconds());
+    }
 }
 
 /*
