@@ -1,12 +1,28 @@
+// Naive game implementation in Rust
 use std::ops::{Add, Sub, Mul};
 
-// Naive game implementation in Rust
 fn main() {
     println!("Hello, world!");
 }
 
+#[test]
+fn test() {
+    let a = Vector::new(3.0, 2.0, 1.0);
+    let b = Vector::new(6.5, 3.0, 5.5);
+    assert_eq!(a + b, Vector::new(9.5, 5.0, 6.5));
+
+    let a = Vector::new(3.0, 2.0, 1.0);
+    let b = Vector::new(2.0, 4.0, 5.0);
+    assert_eq!(a * b, Vector::new(6.0, 8.0, 5.0));
+
+    let a = Vector::new(3.0, 3.0, 1.0);
+    let b = Vector::new(2.0, 1.0, 2.0);
+    assert_eq!(a - b, Vector::new(1.0, 2.0, -1.0));
+}
+
+#[derive(PartialEq, Debug)]
 struct Vector {
-    x: f32, // float's in C# are single-precision, so f32 is used here instead of f64's
+    x: f32, // floats in C# are single-precision, so f32 is used here instead of f64
     y: f32,
     z: f32
 }
