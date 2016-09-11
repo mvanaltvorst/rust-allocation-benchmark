@@ -1,4 +1,4 @@
-// Optimized game implementation in Rust
+// Naive game implementation in Rust
 extern crate time;
 
 use time::precise_time_ns;
@@ -9,40 +9,8 @@ static NUM_ENTITIES: usize = 1000;
 static CHUNK_COUNT: usize = 100;
 
 fn main() {
-    // TODO: Implement timing
-    println!("Loading World...");
-    let start = precise_time_ns();
-    let mut game = Game::new();
-    let end = precise_time_ns();
-    println!("FINISHED!");
-    println!("Load Time: {} milliseconds", (end - start) as f64 * 0.000001);
-
-    loop {
-        let start = precise_time_ns();
-        let playerMovement = Vector::new(0.1, 0.0, 0.0);
-        game.player_location = game.player_location + playerMovement;
-        game.update_chunks();
-        let end = precise_time_ns();
-        println!("{} milliseconds", (end - start) as f64 * 0.000001);
-    }
-}
-
-/*
-Game
-*/
-struct Game {
-    chunks: Vec<Chunk>,
-    player_location: Vector,
-    chunk_counter: f32
-}
-
-impl Game {
-    fn new() -> Game {
-        let mut chunk_counter = 0.0f32;
         let chunks = {
-            let mut chunks = Vec::with_capacity(CHUNK_COUNT);
-            for _ in 0..CHUNK_COUNT {
-                chunks.push(Chunk::new(Vector::new(chunk_counter, 0.0, 0.0)));
+            for i in 0..CHUNK_COUNT {
                 chunk_counter += 1.0;
             }
             chunks
@@ -96,7 +64,7 @@ impl Chunk {
                 let converted_i = i as f32;
                 let block = Block::new(
                     Vector::new(converted_i, converted_i, converted_i),
-                    format!("Block: {}", i),
+                    format!("Block: {}", i).to_string(),
                     100,
                     1,
                     true,
@@ -194,7 +162,8 @@ impl Entity {
     }
 
     fn update_position(&mut self) {
-        self.location = self.location + self.speed;
+        let movementVector = Vector::new(1.0, 1.0, 1.0) * self.speed.clone();
+        self.location = self.location.clone() + movementVector;
     }
 }
 
