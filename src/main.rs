@@ -20,12 +20,11 @@ struct Entity {
     name: String,
     health: i32,
     speed: Vector,
-    type: EntityType
 }
 
 impl Entity {
-    fn new(location: Vector, type: EntityType) -> Entity {
-        match type {
+    fn new(location: Vector, entity_type: EntityType) -> Entity {
+        match entity_type {
             EntityType::Zombie => Entity {
                 location: location,
                 name: "Zombie".to_string(),
@@ -64,7 +63,7 @@ struct Block {
     textureid: usize,
     breakable: bool,
     visible: bool,
-    type: i32
+    block_type: i32
 }
 
 impl Block {
@@ -75,7 +74,7 @@ impl Block {
            textureid: usize,
            breakable: bool,
            visible: bool,
-           type: i32) -> Block {
+           block_type: i32) -> Block {
         Block {
             location: location,
             name: name,
@@ -83,7 +82,7 @@ impl Block {
             textureid: textureid,
             breakable: breakable,
             visible: visible,
-            type: type
+            block_type: block_type
         }
     }
 }
