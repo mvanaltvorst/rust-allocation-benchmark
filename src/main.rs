@@ -6,6 +6,55 @@ fn main() {
 }
 
 /*
+Entity
+*/
+enum EntityType {
+    Zombie,
+    Chicken,
+    Exploder,
+    TallCreepyThing
+}
+
+struct Entity {
+    location: Vector,
+    name: String,
+    health: i32,
+    speed: Vector,
+    type: EntityType
+}
+
+impl Entity {
+    fn new(location: Vector, type: EntityType) -> Entity {
+        match type {
+            EntityType::Zombie => Entity {
+                location: location,
+                name: "Zombie".to_string(),
+                health: 50,
+                speed: Vector::new(0.5, 0.0, 0.5) // slow, can't fly
+            },
+            EntityType::Chicken => Entity {
+                location: location,
+                name: "Chicken".to_string(),
+                health: 25,
+                speed: Vector::new(0.75, 0.25, 0.75) // can fly a bit
+            },
+            EntityType::Exploder => Entity {
+                location: location,
+                name: "Exploder".to_string(),
+                health: 75,
+                speed: Vector::new(0.75, 0.0, 0.75)
+            },
+            EntityType::TallCreepyThing => Entity {
+                location: location,
+                name: "Tall Creepy Thing".to_string(),
+                health: 500,
+                speed: Vector::new(1.0, 1.0, 1.0) // does what he wants
+            }
+        }
+    }
+}
+
+/*
 Block
 */
 struct Block {
