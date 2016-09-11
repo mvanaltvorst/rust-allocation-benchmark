@@ -51,6 +51,11 @@ impl Entity {
             }
         }
     }
+
+    fn update_position(&mut self) {
+        let movementVector = Vector::new(1.0, 1.0, 1.0) * self.speed;
+        self.location = self.location + movementVector;
+    }
 }
 
 /*
