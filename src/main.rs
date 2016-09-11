@@ -5,8 +5,45 @@ fn main() {
     println!("Hello, world!");
 }
 
+/*
+Block
+*/
+struct Block {
+    location: Vector,
+    name: String,
+    durability: i32,
+    textureid: usize,
+    breakable: bool,
+    visible: bool,
+    type: i32
+}
+
+impl Block {
+    //TODO Make new() more elegant
+    fn new(location: Vector,
+           name: String,
+           durability: i32,
+           textureid: usize,
+           breakable: bool,
+           visible: bool,
+           type: i32) -> Block {
+        Block {
+            location: location,
+            name: name,
+            durability: durability,
+            textureid: textureid,
+            breakable: breakable,
+            visible: visible,
+            type: type
+        }
+    }
+}
+
+/*
+Vector
+*/
 #[test]
-fn test() {
+fn test_vector() {
     let a = Vector::new(3.0, 2.0, 1.0);
     let b = Vector::new(6.5, 3.0, 5.5);
     assert_eq!(a + b, Vector::new(9.5, 5.0, 6.5));
