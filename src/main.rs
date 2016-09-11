@@ -47,7 +47,7 @@ impl Game {
         let player_location = self.player_location.clone();
 
         self.chunks.retain(| x | {
-            let chunkDistance = Vector::get_distance(x.location, self.player_location);
+            let chunkDistance = Vector::get_distance(x.location, player_location);
             if chunkDistance > CHUNK_COUNT as f32 {
                 amount_of_chunks_removed += 1;
                 return false;
@@ -234,7 +234,7 @@ fn test_vector() {
     assert_eq!(a - b, Vector::new(1.0, 2.0, -1.0));
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 struct Vector {
     x: f32, // floats in C# are single-precision, so f32 is used here instead of f64
     y: f32,
